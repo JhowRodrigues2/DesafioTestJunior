@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useEffect } from "react";
 import { login } from "./utills";
 // Instruções:
 // * Você tem um formulário de login INCOMPLETO
@@ -13,17 +14,17 @@ import { login } from "./utills";
 // todo - Mostre um alerta caso o login seja efetuado com sucesso (javascript alert). Investigue a função login() para entender como ter sucesso na requisição.
 
 const FormLogin = () => {
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  };
-
-  const [isDisabled, setIsDisabled] = useState(false);
-
   const [email, setEmail] = useState("");
 
   const [password, setPassword] = useState("");
 
-  console.log(isDisabled);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    login({ email, password });
+
+    console.log(email);
+  };
+
   return (
     <div className="login-page">
       <div className="form">
@@ -38,7 +39,12 @@ const FormLogin = () => {
             placeholder="password"
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button onClick={login}>login</button>
+          <button
+            onClick={handleSubmit}
+            disabled={email != "" && password.length > 6 ? false : true}
+          >
+            login
+          </button>
         </form>
       </div>
     </div>
