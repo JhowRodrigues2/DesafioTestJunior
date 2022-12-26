@@ -15,29 +15,44 @@ import { login } from "./utills";
 
 const FormLogin = () => {
   const [email, setEmail] = useState("");
-
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    login({ email, password });
-
-    console.log(email);
+    await login({ email, password })
+      .then((res) => {
+        alert(res);
+        setError("");
+      })
+      .catch((res) => {
+        setError(res);
+      });
   };
 
+  useEffect(() => {
+    if (email.length > 0) {
+      setError("");
+    }
+  }, [email]);
   return (
     <div className="login-page">
       <div className="form">
         <form className="login-form" onSubmit={handleSubmit}>
+          <div className="errorMessage">
+            <p>{error}</p>
+          </div>
           <input
             type="email"
             placeholder="email"
             onChange={(e) => setEmail(e.target.value)}
+            value={email}
           />
           <input
             type="password"
             placeholder="password"
             onChange={(e) => setPassword(e.target.value)}
+            value={password}
           />
           <button
             onClick={handleSubmit}
