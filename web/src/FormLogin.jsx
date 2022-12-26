@@ -17,17 +17,21 @@ const FormLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setIsDisabled(true);
+
     await login({ email, password })
       .then((res) => {
         alert(res);
-        setError("");
       })
       .catch((res) => {
         setError(res);
-      });
+      })
+      .finally(() => setIsDisabled(false));
   };
 
   useEffect(() => {
@@ -35,6 +39,7 @@ const FormLogin = () => {
       setError("");
     }
   }, [email]);
+
   return (
     <div className="login-page">
       <div className="form">
@@ -56,7 +61,7 @@ const FormLogin = () => {
           />
           <button
             onClick={handleSubmit}
-            disabled={email != "" && password.length > 6 ? false : true}
+            disabled={email === "" || password.length < 6 || isDisabled}
           >
             login
           </button>
